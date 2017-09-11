@@ -3,7 +3,6 @@ package com.rxjava2.android.samples.ui.operators;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -31,17 +30,15 @@ public class PublishSubjectExampleActivity extends AppCompatActivity {
         btn = (Button) findViewById(R.id.btn);
         textView = (TextView) findViewById(R.id.textView);
 
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                doSomeWork();
-            }
-        });
+        btn.setOnClickListener(v -> doSomeWork());
     }
 
     /* PublishSubject emits to an observer only those items that are emitted
      * by the source Observable, subsequent to the time of the subscription.
      */
+    /**
+     * {@link http://reactivex.io/documentation/subject.html#PublishSubject}
+     * */
     private void doSomeWork() {
 
         PublishSubject<Integer> source = PublishSubject.create();
@@ -68,28 +65,28 @@ public class PublishSubjectExampleActivity extends AppCompatActivity {
 
             @Override
             public void onSubscribe(Disposable d) {
-                Log.d(TAG, " First onSubscribe : " + d.isDisposed());
+                Log.e(TAG, " First onSubscribe : " + d.isDisposed());
             }
 
             @Override
             public void onNext(Integer value) {
                 textView.append(" First onNext : value : " + value);
                 textView.append(AppConstant.LINE_SEPARATOR);
-                Log.d(TAG, " First onNext value : " + value);
+                Log.e(TAG, " First onNext value : " + value);
             }
 
             @Override
             public void onError(Throwable e) {
                 textView.append(" First onError : " + e.getMessage());
                 textView.append(AppConstant.LINE_SEPARATOR);
-                Log.d(TAG, " First onError : " + e.getMessage());
+                Log.e(TAG, " First onError : " + e.getMessage());
             }
 
             @Override
             public void onComplete() {
                 textView.append(" First onComplete");
                 textView.append(AppConstant.LINE_SEPARATOR);
-                Log.d(TAG, " First onComplete");
+                Log.e(TAG, " First onComplete");
             }
         };
     }
@@ -100,7 +97,7 @@ public class PublishSubjectExampleActivity extends AppCompatActivity {
             @Override
             public void onSubscribe(Disposable d) {
                 textView.append(" Second onSubscribe : isDisposed :" + d.isDisposed());
-                Log.d(TAG, " Second onSubscribe : " + d.isDisposed());
+                Log.e(TAG, " Second onSubscribe : " + d.isDisposed());
                 textView.append(AppConstant.LINE_SEPARATOR);
             }
 
@@ -108,21 +105,21 @@ public class PublishSubjectExampleActivity extends AppCompatActivity {
             public void onNext(Integer value) {
                 textView.append(" Second onNext : value : " + value);
                 textView.append(AppConstant.LINE_SEPARATOR);
-                Log.d(TAG, " Second onNext value : " + value);
+                Log.e(TAG, " Second onNext value : " + value);
             }
 
             @Override
             public void onError(Throwable e) {
                 textView.append(" Second onError : " + e.getMessage());
                 textView.append(AppConstant.LINE_SEPARATOR);
-                Log.d(TAG, " Second onError : " + e.getMessage());
+                Log.e(TAG, " Second onError : " + e.getMessage());
             }
 
             @Override
             public void onComplete() {
                 textView.append(" Second onComplete");
                 textView.append(AppConstant.LINE_SEPARATOR);
-                Log.d(TAG, " Second onComplete");
+                Log.e(TAG, " Second onComplete");
             }
         };
     }

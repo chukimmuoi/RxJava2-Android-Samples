@@ -3,7 +3,6 @@ package com.rxjava2.android.samples.ui.operators;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -31,17 +30,15 @@ public class ReplaySubjectExampleActivity extends AppCompatActivity {
         btn = (Button) findViewById(R.id.btn);
         textView = (TextView) findViewById(R.id.textView);
 
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                doSomeWork();
-            }
-        });
+        btn.setOnClickListener(v -> doSomeWork());
     }
 
     /* ReplaySubject emits to any observer all of the items that were emitted
      * by the source Observable, regardless of when the observer subscribes.
      */
+    /**
+     * http://reactivex.io/documentation/subject.html#ReplaySubject
+     * */
     private void doSomeWork() {
 
         ReplaySubject<Integer> source = ReplaySubject.create();
