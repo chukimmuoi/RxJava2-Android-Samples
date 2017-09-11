@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -31,17 +30,15 @@ public class DistinctExampleActivity extends AppCompatActivity {
         btn = (Button) findViewById(R.id.btn);
         textView = (TextView) findViewById(R.id.textView);
 
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                doSomeWork();
-            }
-        });
+        btn.setOnClickListener(v -> doSomeWork());
     }
 
     /*
      * distinct() suppresses duplicate items emitted by the source Observable.
      */
+    /**
+     * {@link http://reactivex.io/documentation/operators/distinct.html}
+     * */
     private void doSomeWork() {
 
         getObservable()
@@ -59,24 +56,24 @@ public class DistinctExampleActivity extends AppCompatActivity {
 
             @Override
             public void onSubscribe(Disposable d) {
-                Log.d(TAG, " onSubscribe : " + d.isDisposed());
+                Log.e(TAG, " onSubscribe : " + d.isDisposed());
             }
 
             @Override
             public void onNext(Integer value) {
                 textView.append(" onNext : value : " + value);
                 textView.append(AppConstant.LINE_SEPARATOR);
-                Log.d(TAG, " onNext value : " + value);
+                Log.e(TAG, " onNext value : " + value);
             }
 
             @Override
             public void onError(Throwable e) {
-                Log.d(TAG, " onError : " + e.getMessage());
+                Log.e(TAG, " onError : " + e.getMessage());
             }
 
             @Override
             public void onComplete() {
-                Log.d(TAG, " onComplete");
+                Log.e(TAG, " onComplete");
             }
         };
     }

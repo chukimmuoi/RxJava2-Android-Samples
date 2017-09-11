@@ -3,7 +3,6 @@ package com.rxjava2.android.samples.ui.operators;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -13,7 +12,6 @@ import com.rxjava2.android.samples.utils.AppConstant;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Predicate;
 
 
 /**
@@ -32,26 +30,19 @@ public class FilterExampleActivity extends AppCompatActivity {
         btn = (Button) findViewById(R.id.btn);
         textView = (TextView) findViewById(R.id.textView);
 
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                doSomeWork();
-            }
-        });
+        btn.setOnClickListener(v -> doSomeWork());
     }
 
     /*
      * simple example by using filter operator to emit only even value
      *
      */
+    /**
+     * {@link http://reactivex.io/documentation/operators/filter.html}
+     * */
     private void doSomeWork() {
-        Observable.just(1, 2, 3, 4, 5, 6)
-                .filter(new Predicate<Integer>() {
-                    @Override
-                    public boolean test(Integer integer) throws Exception {
-                        return integer % 2 == 0;
-                    }
-                })
+        Observable.just(1, 2, 3, 4 , 5, 6)
+                .filter(integer -> integer % 2 == 0)
                 .subscribe(getObserver());
     }
 
@@ -61,7 +52,7 @@ public class FilterExampleActivity extends AppCompatActivity {
 
             @Override
             public void onSubscribe(Disposable d) {
-                Log.d(TAG, " onSubscribe : " + d.isDisposed());
+                Log.e(TAG, " onSubscribe : " + d.isDisposed());
             }
 
             @Override
@@ -70,22 +61,22 @@ public class FilterExampleActivity extends AppCompatActivity {
                 textView.append(AppConstant.LINE_SEPARATOR);
                 textView.append(" value : " + value);
                 textView.append(AppConstant.LINE_SEPARATOR);
-                Log.d(TAG, " onNext ");
-                Log.d(TAG, " value : " + value);
+                Log.e(TAG, " onNext ");
+                Log.e(TAG, " value : " + value);
             }
 
             @Override
             public void onError(Throwable e) {
                 textView.append(" onError : " + e.getMessage());
                 textView.append(AppConstant.LINE_SEPARATOR);
-                Log.d(TAG, " onError : " + e.getMessage());
+                Log.e(TAG, " onError : " + e.getMessage());
             }
 
             @Override
             public void onComplete() {
                 textView.append(" onComplete");
                 textView.append(AppConstant.LINE_SEPARATOR);
-                Log.d(TAG, " onComplete");
+                Log.e(TAG, " onComplete");
             }
         };
     }

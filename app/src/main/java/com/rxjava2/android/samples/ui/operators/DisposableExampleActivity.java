@@ -4,17 +4,13 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import com.rxjava2.android.samples.R;
 import com.rxjava2.android.samples.utils.AppConstant;
 
-import java.util.concurrent.Callable;
-
 import io.reactivex.Observable;
-import io.reactivex.ObservableSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.observers.DisposableObserver;
@@ -37,12 +33,7 @@ public class DisposableExampleActivity extends AppCompatActivity {
         btn = (Button) findViewById(R.id.btn);
         textView = (TextView) findViewById(R.id.textView);
 
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                doSomeWork();
-            }
-        });
+        btn.setOnClickListener(v -> doSomeWork());
     }
 
     @Override
@@ -55,6 +46,9 @@ public class DisposableExampleActivity extends AppCompatActivity {
      * Example to understand how to use disposables.
      * disposables is cleared in onDestroy of this activity.
      */
+    /**
+     * {@link http://reactivex.io/RxJava/2.x/javadoc/io/reactivex/disposables/CompositeDisposable.html}
+     * */
     void doSomeWork() {
         disposables.add(sampleObservable()
                 // Run on a background thread
@@ -66,33 +60,29 @@ public class DisposableExampleActivity extends AppCompatActivity {
                     public void onComplete() {
                         textView.append(" onComplete");
                         textView.append(AppConstant.LINE_SEPARATOR);
-                        Log.d(TAG, " onComplete");
+                        Log.e(TAG, " onComplete");
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         textView.append(" onError : " + e.getMessage());
                         textView.append(AppConstant.LINE_SEPARATOR);
-                        Log.d(TAG, " onError : " + e.getMessage());
+                        Log.e(TAG, " onError : " + e.getMessage());
                     }
 
                     @Override
                     public void onNext(String value) {
                         textView.append(" onNext : value : " + value);
                         textView.append(AppConstant.LINE_SEPARATOR);
-                        Log.d(TAG, " onNext value : " + value);
+                        Log.e(TAG, " onNext value : " + value);
                     }
                 }));
     }
 
     static Observable<String> sampleObservable() {
-        return Observable.defer(new Callable<ObservableSource<? extends String>>() {
-            @Override
-            public ObservableSource<? extends String> call() throws Exception {
-                // Do some long running operation
-                SystemClock.sleep(2000);
-                return Observable.just("one", "two", "three", "four", "five");
-            }
+        return Observable.defer(() -> {
+            SystemClock.sleep(2000);
+            return Observable.just("one", "two", "three", "four", "five");
         });
     }
 }

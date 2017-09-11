@@ -3,7 +3,6 @@ package com.rxjava2.android.samples.ui.operators;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -31,17 +30,15 @@ public class DeferExampleActivity extends AppCompatActivity {
         btn = (Button) findViewById(R.id.btn);
         textView = (TextView) findViewById(R.id.textView);
 
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                doSomeWork();
-            }
-        });
+        btn.setOnClickListener(v -> doSomeWork());
     }
 
     /*
      * Defer used for Deferring Observable code until subscription in RxJava
      */
+    /**
+     * http://reactivex.io/documentation/operators/defer.html
+     * */
     private void doSomeWork() {
 
         Car car = new Car();
@@ -68,21 +65,21 @@ public class DeferExampleActivity extends AppCompatActivity {
             public void onNext(String value) {
                 textView.append(" onNext : value : " + value);
                 textView.append(AppConstant.LINE_SEPARATOR);
-                Log.d(TAG, " onNext : value : " + value);
+                Log.e(TAG, " onNext : value : " + value);
             }
 
             @Override
             public void onError(Throwable e) {
                 textView.append(" onError : " + e.getMessage());
                 textView.append(AppConstant.LINE_SEPARATOR);
-                Log.d(TAG, " onError : " + e.getMessage());
+                Log.e(TAG, " onError : " + e.getMessage());
             }
 
             @Override
             public void onComplete() {
                 textView.append(" onComplete");
                 textView.append(AppConstant.LINE_SEPARATOR);
-                Log.d(TAG, " onComplete");
+                Log.e(TAG, " onComplete");
             }
         };
     }
