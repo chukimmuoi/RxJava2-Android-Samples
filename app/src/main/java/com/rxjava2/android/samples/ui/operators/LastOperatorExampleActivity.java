@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -32,17 +31,15 @@ public class LastOperatorExampleActivity extends AppCompatActivity {
         btn = (Button) findViewById(R.id.btn);
         textView = (TextView) findViewById(R.id.textView);
 
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                doSomeWork();
-            }
-        });
+        btn.setOnClickListener(v -> doSomeWork());
     }
 
     /*
     * last() emits only the last item emitted by the Observable.
     */
+    /**
+     * http://reactivex.io/documentation/operators/last.html
+     * */
     private void doSomeWork() {
         getObservable().last("A1") // the default item ("A1") to emit if the source ObservableSource is empty
                 .subscribe(getObserver());
@@ -57,14 +54,14 @@ public class LastOperatorExampleActivity extends AppCompatActivity {
 
             @Override
             public void onSubscribe(Disposable d) {
-                Log.d(TAG, " onSubscribe : " + d.isDisposed());
+                Log.e(TAG, " onSubscribe : " + d.isDisposed());
             }
 
             @Override
             public void onSuccess(String value) {
                 textView.append(" onNext : value : " + value);
                 textView.append(AppConstant.LINE_SEPARATOR);
-                Log.d(TAG, " onNext value : " + value);
+                Log.e(TAG, " onNext value : " + value);
             }
 
 
@@ -72,7 +69,7 @@ public class LastOperatorExampleActivity extends AppCompatActivity {
             public void onError(Throwable e) {
                 textView.append(" onError : " + e.getMessage());
                 textView.append(AppConstant.LINE_SEPARATOR);
-                Log.d(TAG, " onError : " + e.getMessage());
+                Log.e(TAG, " onError : " + e.getMessage());
             }
         };
     }

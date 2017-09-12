@@ -35,6 +35,9 @@ public class FlowableExampleActivity extends AppCompatActivity {
     /*
      * simple example using Flowable
      */
+    /**
+     * http://reactivex.io/RxJava/2.x/javadoc/io/reactivex/Flowable.html
+     * */
     private void doSomeWork() {
 
         Flowable<Integer> observable = Flowable.just(1, 2, 3, 4);

@@ -3,7 +3,6 @@ package com.rxjava2.android.samples.ui.operators;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -15,12 +14,9 @@ import com.rxjava2.android.samples.utils.Utils;
 import java.util.List;
 
 import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
-import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.BiFunction;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -39,12 +35,7 @@ public class ZipExampleActivity extends AppCompatActivity {
         btn = (Button) findViewById(R.id.btn);
         textView = (TextView) findViewById(R.id.textView);
 
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                doSomeWork();
-            }
-        });
+        btn.setOnClickListener(v -> doSomeWork());
     }
 
     /*
@@ -53,42 +44,32 @@ public class ZipExampleActivity extends AppCompatActivity {
     * Another one, the list of football fans
     * Then we are finding the list of users who loves both
     */
+    /**
+     * http://reactivex.io/documentation/operators/zip.html
+     * */
     private void doSomeWork() {
-        Observable.zip(getCricketFansObservable(), getFootballFansObservable(),
-                new BiFunction<List<User>, List<User>, List<User>>() {
-                    @Override
-                    public List<User> apply(List<User> cricketFans, List<User> footballFans) throws Exception {
-                        return Utils.filterUserWhoLovesBoth(cricketFans, footballFans);
-                    }
-                })
-                // Run on a background thread
+        Observable.zip(getFootballFansObservable(), getCricketFansObservable(),
+                (users, users2) -> Utils.filterUserWhoLovesBoth(users, users2))
                 .subscribeOn(Schedulers.io())
-                // Be notified on the main thread
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(getObserver());
     }
 
     private Observable<List<User>> getCricketFansObservable() {
-        return Observable.create(new ObservableOnSubscribe<List<User>>() {
-            @Override
-            public void subscribe(ObservableEmitter<List<User>> e) throws Exception {
-                if (!e.isDisposed()) {
-                    e.onNext(Utils.getUserListWhoLovesCricket());
-                    e.onComplete();
-                }
-            }
+        return Observable.create(observableEmitter -> {
+           if(!observableEmitter.isDisposed()){
+               observableEmitter.onNext(Utils.getUserListWhoLovesCricket());
+               observableEmitter.onComplete();
+           }
         });
     }
 
     private Observable<List<User>> getFootballFansObservable() {
-        return Observable.create(new ObservableOnSubscribe<List<User>>() {
-            @Override
-            public void subscribe(ObservableEmitter<List<User>> e) throws Exception {
-                if (!e.isDisposed()) {
-                    e.onNext(Utils.getUserListWhoLovesFootball());
-                    e.onComplete();
-                }
-            }
+        return Observable.create(observableEmitter -> {
+           if(!observableEmitter.isDisposed()) {
+               observableEmitter.onNext(Utils.getUserListWhoLovesFootball());
+               observableEmitter.onComplete();
+           }
         });
     }
 
@@ -97,7 +78,7 @@ public class ZipExampleActivity extends AppCompatActivity {
 
             @Override
             public void onSubscribe(Disposable d) {
-                Log.d(TAG, " onSubscribe : " + d.isDisposed());
+                Log.e(TAG, " onSubscribe : " + d.isDisposed());
             }
 
             @Override
@@ -108,21 +89,21 @@ public class ZipExampleActivity extends AppCompatActivity {
                     textView.append(" firstname : " + user.firstname);
                     textView.append(AppConstant.LINE_SEPARATOR);
                 }
-                Log.d(TAG, " onNext : " + userList.size());
+                Log.e(TAG, " onNext : " + userList.size());
             }
 
             @Override
             public void onError(Throwable e) {
                 textView.append(" onError : " + e.getMessage());
                 textView.append(AppConstant.LINE_SEPARATOR);
-                Log.d(TAG, " onError : " + e.getMessage());
+                Log.e(TAG, " onError : " + e.getMessage());
             }
 
             @Override
             public void onComplete() {
                 textView.append(" onComplete");
                 textView.append(AppConstant.LINE_SEPARATOR);
-                Log.d(TAG, " onComplete");
+                Log.e(TAG, " onComplete");
             }
         };
     }

@@ -37,7 +37,7 @@ public class ReplaySubjectExampleActivity extends AppCompatActivity {
      * by the source Observable, regardless of when the observer subscribes.
      */
     /**
-     * http://reactivex.io/documentation/subject.html#ReplaySubject
+     * {@link http://reactivex.io/documentation/subject.html#ReplaySubject}
      * */
     private void doSomeWork() {
 
@@ -64,28 +64,28 @@ public class ReplaySubjectExampleActivity extends AppCompatActivity {
 
             @Override
             public void onSubscribe(Disposable d) {
-                Log.d(TAG, " First onSubscribe : " + d.isDisposed());
+                Log.e(TAG, " First onSubscribe : " + d.isDisposed());
             }
 
             @Override
             public void onNext(Integer value) {
                 textView.append(" First onNext : value : " + value);
                 textView.append(AppConstant.LINE_SEPARATOR);
-                Log.d(TAG, " First onNext value : " + value);
+                Log.e(TAG, " First onNext value : " + value);
             }
 
             @Override
             public void onError(Throwable e) {
                 textView.append(" First onError : " + e.getMessage());
                 textView.append(AppConstant.LINE_SEPARATOR);
-                Log.d(TAG, " First onError : " + e.getMessage());
+                Log.e(TAG, " First onError : " + e.getMessage());
             }
 
             @Override
             public void onComplete() {
                 textView.append(" First onComplete");
                 textView.append(AppConstant.LINE_SEPARATOR);
-                Log.d(TAG, " First onComplete");
+                Log.e(TAG, " First onComplete");
             }
         };
     }
@@ -96,7 +96,7 @@ public class ReplaySubjectExampleActivity extends AppCompatActivity {
             @Override
             public void onSubscribe(Disposable d) {
                 textView.append(" Second onSubscribe : isDisposed :" + d.isDisposed());
-                Log.d(TAG, " Second onSubscribe : " + d.isDisposed());
+                Log.e(TAG, " Second onSubscribe : " + d.isDisposed());
                 textView.append(AppConstant.LINE_SEPARATOR);
             }
 
@@ -104,21 +104,21 @@ public class ReplaySubjectExampleActivity extends AppCompatActivity {
             public void onNext(Integer value) {
                 textView.append(" Second onNext : value : " + value);
                 textView.append(AppConstant.LINE_SEPARATOR);
-                Log.d(TAG, " Second onNext value : " + value);
+                Log.e(TAG, " Second onNext value : " + value);
             }
 
             @Override
             public void onError(Throwable e) {
                 textView.append(" Second onError : " + e.getMessage());
                 textView.append(AppConstant.LINE_SEPARATOR);
-                Log.d(TAG, " Second onError : " + e.getMessage());
+                Log.e(TAG, " Second onError : " + e.getMessage());
             }
 
             @Override
             public void onComplete() {
                 textView.append(" Second onComplete");
                 textView.append(AppConstant.LINE_SEPARATOR);
-                Log.d(TAG, " Second onComplete");
+                Log.e(TAG, " Second onComplete");
             }
         };
     }
