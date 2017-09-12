@@ -9,19 +9,14 @@ import android.widget.ProgressBar;
 
 import com.rxjava2.android.samples.R;
 
-import org.reactivestreams.Publisher;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Flowable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
-import io.reactivex.functions.Function;
 import io.reactivex.processors.PublishProcessor;
 
 /**
@@ -91,26 +86,19 @@ public class PaginationActivity extends AppCompatActivity {
      * subscribing for data
      */
     private void subscribeForData() {
-
         Disposable disposable = paginator
                 .onBackpressureDrop()
-                .concatMap(new Function<Integer, Publisher<List<String>>>() {
-                    @Override
-                    public Publisher<List<String>> apply(@NonNull Integer page) throws Exception {
-                        loading = true;
-                        progressBar.setVisibility(View.VISIBLE);
-                        return dataFromNetwork(page);
-                    }
+                .concatMap(integer -> {
+                    loading = true;
+                    progressBar.setVisibility(View.VISIBLE);
+                    return dataFromNetwork(integer);
                 })
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<List<String>>() {
-                    @Override
-                    public void accept(@NonNull List<String> items) throws Exception {
-                        paginationAdapter.addItems(items);
-                        paginationAdapter.notifyDataSetChanged();
-                        loading = false;
-                        progressBar.setVisibility(View.INVISIBLE);
-                    }
+                .subscribe(strings -> {
+                    paginationAdapter.addItems(strings);
+                    paginationAdapter.notifyDataSetChanged();
+                    loading = false;
+                    progressBar.setVisibility(View.INVISIBLE);
                 });
 
         compositeDisposable.add(disposable);
@@ -125,15 +113,12 @@ public class PaginationActivity extends AppCompatActivity {
     private Flowable<List<String>> dataFromNetwork(final int page) {
         return Flowable.just(true)
                 .delay(2, TimeUnit.SECONDS)
-                .map(new Function<Boolean, List<String>>() {
-                    @Override
-                    public List<String> apply(@NonNull Boolean value) throws Exception {
-                        List<String> items = new ArrayList<>();
-                        for (int i = 1; i <= 10; i++) {
-                            items.add("Item " + (page * 10 + i));
-                        }
-                        return items;
+                .map(aBoolean -> {
+                    List<String> items = new ArrayList<>();
+                    for (int i = 1; i <= 10; i++) {
+                        items.add("Item " + (page * 10 + i));
                     }
+                    return items;
                 });
     }
 }
